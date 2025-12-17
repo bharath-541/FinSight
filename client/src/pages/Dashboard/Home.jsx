@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import summaryService from "../../services/summary.service";
 import PageMeta from "../../components/common/PageMeta";
+import EmptyState from "../../components/common/EmptyState";
 
 // Import finance components
 import FinancialMetrics from "../../components/finance/FinancialMetrics";
@@ -9,15 +10,23 @@ import BudgetProgress from "../../components/finance/BudgetProgress";
 import SpendingVelocityChart from "../../components/finance/SpendingVelocityChart";
 import RecentExpenses from "../../components/finance/RecentExpenses";
 
+// Import icons
+import {
+  ShootingStarIcon,
+  AlertIcon
+} from "../../icons";
+
 export default function Home() {
   const [summary, setSummary] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isFirstTimeUser, setIsFirstTimeUser] = useState(false);
 
   useEffect(() => {
     const fetchSummary = async () => {
       try {
         setLoading(true);
+        setIsFirstTimeUser(false);
         // Get current month in YYYY-MM format
         const now = new Date();
         const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
@@ -26,7 +35,14 @@ export default function Home() {
         setSummary(data);
       } catch (err) {
         console.error('Error fetching summary:', err);
-        setError(err.message);
+
+        // Check if this is a first-time user (no income set)
+        if (err.response?.status === 400 &&
+          err.response?.data?.message?.includes('monthly income')) {
+          setIsFirstTimeUser(true);
+        } else {
+          setError(err.message);
+        }
       } finally {
         setLoading(false);
       }
@@ -43,12 +59,43 @@ export default function Home() {
     );
   }
 
+  if (isFirstTimeUser) {
+    return (
+      <>
+        <PageMeta
+          title="Welcome to FinSight | Get Started"
+          description="Set up your financial profile to start tracking your expenses"
+        />
+        <EmptyState
+          icon={ShootingStarIcon}
+          title="Welcome to FinSight! 🎉"
+          description="Let's get you started on your financial journey. To begin tracking your finances, you'll need to set up your profile with your monthly income, add some expenses, and optionally manage your assets and debts."
+          actionText="Set Up Monthly Income"
+          actionLink="/profile"
+          secondaryActions={[
+            { text: "Add Your First Expense", link: "/expenses" },
+            { text: "Manage Assets & Debts", link: "/assets-debts" }
+          ]}
+        />
+      </>
+    );
+  }
+
   if (error) {
     return (
-      <div className="p-4 text-error-700 bg-error-50 rounded-lg dark:bg-error-500/10 dark:text-error-400">
-        <p className="font-semibold">Error loading financial data</p>
-        <p className="text-sm mt-1">{error}</p>
-      </div>
+      <>
+        <PageMeta
+          title="Error | FinSight"
+          description="An error occurred while loading your financial data"
+        />
+        <EmptyState
+          icon={AlertIcon}
+          title="Something went wrong"
+          description={error}
+          actionText="Try Again"
+          actionOnClick={() => window.location.reload()}
+        />
+      </>
     );
   }
 

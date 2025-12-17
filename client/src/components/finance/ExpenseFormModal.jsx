@@ -107,7 +107,7 @@ export default function ExpenseFormModal({ isOpen, onClose, onSave, expense }) {
                     </p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="px-6 py-5 space-y-5">
+                <form onSubmit={handleSubmit} className="px-6 py-4 space-y-4">
                     {error && (
                         <div className="p-3 text-sm text-error-700 bg-error-50 rounded-lg dark:bg-error-500/10 dark:text-error-400">
                             {error}
@@ -159,11 +159,11 @@ export default function ExpenseFormModal({ isOpen, onClose, onSave, expense }) {
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                             Bucket <span className="text-error-500">*</span>
                         </label>
-                        <div className="space-y-2">
+                        <div className="space-y-1.5">
                             {BUCKETS.map(bucket => (
                                 <label
                                     key={bucket.value}
-                                    className={`flex items-start p-3 rounded-lg border-2 cursor-pointer transition-all ${formData.bucket === bucket.value
+                                    className={`flex items-center px-3 py-2 rounded-lg border-2 cursor-pointer transition-all ${formData.bucket === bucket.value
                                         ? 'border-brand-500 bg-brand-50 dark:bg-brand-500/10'
                                         : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
                                         }`}
@@ -174,15 +174,15 @@ export default function ExpenseFormModal({ isOpen, onClose, onSave, expense }) {
                                         value={bucket.value}
                                         checked={formData.bucket === bucket.value}
                                         onChange={(e) => handleInputChange("bucket", e.target.value)}
-                                        className="mt-0.5 text-brand-600 focus:ring-brand-500"
+                                        className="text-brand-600 focus:ring-brand-500"
                                     />
-                                    <div className="ml-3">
-                                        <p className="text-sm font-medium text-gray-800 dark:text-white/90">
+                                    <div className="ml-3 flex-1">
+                                        <span className="text-sm font-medium text-gray-800 dark:text-white/90">
                                             {bucket.label}
-                                        </p>
-                                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                                        </span>
+                                        <span className="text-xs text-gray-500 dark:text-gray-400 ml-2">
                                             {bucket.description}
-                                        </p>
+                                        </span>
                                     </div>
                                 </label>
                             ))}
@@ -211,14 +211,14 @@ export default function ExpenseFormModal({ isOpen, onClose, onSave, expense }) {
                         <textarea
                             value={formData.note}
                             onChange={(e) => handleInputChange("note", e.target.value)}
-                            rows={3}
+                            rows={2}
                             className="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white/90 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 outline-none transition-all resize-none"
                             placeholder="Add any additional details..."
                         />
                     </div>
 
                     {/* Action Buttons */}
-                    <div className="flex gap-3 pt-4">
+                    <div className="flex gap-3 pt-2">
                         <button
                             type="button"
                             onClick={onClose}

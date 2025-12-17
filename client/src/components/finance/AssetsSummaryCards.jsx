@@ -45,7 +45,7 @@ export default function AssetsSummaryCards({ summary }) {
     ];
 
     return (
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-4 md:gap-6">
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
             {metrics.map((metric, index) => (
                 <div
                     key={index}
@@ -54,8 +54,8 @@ export default function AssetsSummaryCards({ summary }) {
                     <div className={`mb-4 flex h-11 w-11 items-center justify-center rounded-full ${metric.bgColor}`}>
                         {metric.icon}
                     </div>
-                    <p className="mb-1 text-sm text-gray-500 dark:text-gray-400">{metric.label}</p>
-                    <p className="text-2xl font-semibold text-gray-800 dark:text-white/90">
+                    <p className="mb-1 text-sm text-gray-500 dark:text-gray-400 truncate">{metric.label}</p>
+                    <p className="text-xl md:text-2xl font-semibold text-gray-800 dark:text-white/90 truncate" title={formatCurrencyWithSign(metric.value)}>
                         {formatCurrencyWithSign(metric.value)}
                     </p>
                 </div>

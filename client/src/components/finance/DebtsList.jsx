@@ -182,65 +182,67 @@ export default function DebtsList({ debts, onUpdate, onEdit, onDelete }) {
                                 key={debt._id}
                                 className="rounded-lg border border-gray-200 p-4 dark:border-gray-800"
                             >
-                                <div className="flex items-start justify-between">
-                                    <div className="flex-1">
-                                        <div className="flex items-center gap-2 mb-2">
-                                            <h4 className="text-base font-semibold text-gray-800 dark:text-white/90">
-                                                {debt.name}
-                                            </h4>
-                                            {getStatusBadge(debt)}
-                                        </div>
-
-                                        <div className="grid grid-cols-2 gap-4 mt-3 md:grid-cols-4">
-                                            <div>
-                                                <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                                                    Remaining Balance
-                                                </p>
-                                                <p className="text-sm font-semibold text-gray-800 dark:text-white/90">
-                                                    {formatCurrencyWithSign(debt.remainingBalance)}
-                                                </p>
+                                <div className="flex flex-col gap-3">
+                                    <div className="flex items-start justify-between">
+                                        <div className="flex-1 min-w-0">
+                                            <div className="flex items-center gap-2 mb-2 flex-wrap">
+                                                <h4 className="text-base font-semibold text-gray-800 dark:text-white/90 truncate">
+                                                    {debt.name}
+                                                </h4>
+                                                {getStatusBadge(debt)}
                                             </div>
 
-                                            <div>
-                                                <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                                                    Interest Rate
-                                                </p>
-                                                <p className="text-sm font-semibold text-gray-800 dark:text-white/90">
-                                                    {debt.interestRate}% p.a.
-                                                </p>
-                                            </div>
+                                            <div className="grid grid-cols-2 gap-3 mt-3 sm:grid-cols-4">
+                                                <div className="min-w-0">
+                                                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1 truncate">
+                                                        Remaining Balance
+                                                    </p>
+                                                    <p className="text-sm font-semibold text-gray-800 dark:text-white/90 truncate" title={formatCurrencyWithSign(debt.remainingBalance)}>
+                                                        {formatCurrencyWithSign(debt.remainingBalance)}
+                                                    </p>
+                                                </div>
 
-                                            <div>
-                                                <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                                                    Monthly EMI
-                                                </p>
-                                                <p className="text-sm font-semibold text-gray-800 dark:text-white/90">
-                                                    {formatCurrencyWithSign(debt.monthlyEMI)}
-                                                </p>
-                                            </div>
+                                                <div className="min-w-0">
+                                                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1 truncate">
+                                                        Interest Rate
+                                                    </p>
+                                                    <p className="text-sm font-semibold text-gray-800 dark:text-white/90">
+                                                        {debt.interestRate}% p.a.
+                                                    </p>
+                                                </div>
 
-                                            <div>
-                                                <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                                                    Original Principal
-                                                </p>
-                                                <p className="text-sm font-semibold text-gray-800 dark:text-white/90">
-                                                    {formatCurrencyWithSign(debt.principal)}
-                                                </p>
+                                                <div className="min-w-0">
+                                                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1 truncate">
+                                                        Monthly EMI
+                                                    </p>
+                                                    <p className="text-sm font-semibold text-gray-800 dark:text-white/90 truncate" title={formatCurrencyWithSign(debt.monthlyEMI)}>
+                                                        {formatCurrencyWithSign(debt.monthlyEMI)}
+                                                    </p>
+                                                </div>
+
+                                                <div className="min-w-0">
+                                                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1 truncate">
+                                                        Original Principal
+                                                    </p>
+                                                    <p className="text-sm font-semibold text-gray-800 dark:text-white/90 truncate" title={formatCurrencyWithSign(debt.principal)}>
+                                                        {formatCurrencyWithSign(debt.principal)}
+                                                    </p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div className="ml-4 flex items-center gap-4">
-                                        {/* Edit/Delete Buttons */}
+                                    {/* Action Buttons */}
+                                    <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-gray-100 dark:border-gray-800">
                                         <button
                                             onClick={() => onEdit(debt)}
-                                            className="text-sm font-medium text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300"
+                                            className="text-sm font-medium text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300 px-2 py-1"
                                         >
                                             Edit
                                         </button>
                                         <button
                                             onClick={() => setDeleteConfirm(debt._id)}
-                                            className="text-sm font-medium text-error-600 hover:text-error-700 dark:text-error-400 dark:hover:text-error-300"
+                                            className="text-sm font-medium text-error-600 hover:text-error-700 dark:text-error-400 dark:hover:text-error-300 px-2 py-1"
                                         >
                                             Delete
                                         </button>
@@ -250,7 +252,7 @@ export default function DebtsList({ debts, onUpdate, onEdit, onDelete }) {
                                             <button
                                                 onClick={() => handlePayEMIClick(debt)}
                                                 disabled={paidThisMonth.has(debt._id)}
-                                                className={`rounded-lg px-4 py-2 text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 ${paidThisMonth.has(debt._id)
+                                                className={`ml-auto rounded-lg px-4 py-2 text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 whitespace-nowrap ${paidThisMonth.has(debt._id)
                                                     ? 'bg-gray-400 cursor-not-allowed'
                                                     : 'bg-brand-500 hover:bg-brand-600'
                                                     }`}

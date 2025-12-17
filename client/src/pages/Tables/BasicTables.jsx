@@ -43,8 +43,6 @@ export default function BasicTables() {
   };
 
   const handleDeleteExpense = async (id) => {
-    if (!confirm('Are you sure you want to delete this expense?')) return;
-
     try {
       await expenseService.deleteExpense(id);
       await fetchExpenses(); // Refresh list
@@ -79,7 +77,7 @@ export default function BasicTables() {
 
       <div className="space-y-6">
         {/* Header with Add Button and Month Filter */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div className="flex flex-col gap-4">
           <div>
             <h2 className="text-xl font-semibold text-gray-800 dark:text-white/90">
               Expense Tracker
@@ -89,7 +87,7 @@ export default function BasicTables() {
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
             {/* Month Filter */}
             <input
               type="month"
@@ -101,7 +99,7 @@ export default function BasicTables() {
             {/* Add Expense Button */}
             <button
               onClick={handleAddExpense}
-              className="inline-flex items-center gap-2 h-11 px-6 rounded-lg bg-brand-500 text-white font-medium hover:bg-brand-600 transition-colors"
+              className="inline-flex items-center justify-center sm:justify-start gap-2 h-11 px-6 rounded-lg bg-brand-500 text-white font-medium hover:bg-brand-600 transition-colors whitespace-nowrap"
             >
               <svg className="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />

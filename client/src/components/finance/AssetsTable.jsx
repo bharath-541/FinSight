@@ -5,6 +5,12 @@ import { Modal } from '../ui/modal';
 export default function AssetsTable({ assets, onEdit, onDelete }) {
     const [openDropdown, setOpenDropdown] = useState(null);
     const [deleteConfirm, setDeleteConfirm] = useState(null);
+
+    const handleDelete = async (assetId) => {
+        await onDelete(assetId);
+        setDeleteConfirm(null);
+    };
+
     if (!assets || assets.length === 0) {
         return (
             <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">

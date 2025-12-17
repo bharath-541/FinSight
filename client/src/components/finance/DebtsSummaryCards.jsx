@@ -52,8 +52,8 @@ export default function DebtsSummaryCards({ summary }) {
                     <div className={`mb-4 flex h-11 w-11 items-center justify-center rounded-full ${metric.bgColor}`}>
                         {metric.icon}
                     </div>
-                    <p className="mb-1 text-sm text-gray-500 dark:text-gray-400">{metric.label}</p>
-                    <p className="text-2xl font-semibold text-gray-800 dark:text-white/90">
+                    <p className="mb-1 text-sm text-gray-500 dark:text-gray-400 truncate">{metric.label}</p>
+                    <p className="text-xl md:text-2xl font-semibold text-gray-800 dark:text-white/90 truncate" title={metric.isCount ? metric.value : formatCurrencyWithSign(metric.value)}>
                         {metric.isCount ? metric.value : formatCurrencyWithSign(metric.value)}
                     </p>
                 </div>

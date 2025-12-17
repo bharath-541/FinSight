@@ -94,7 +94,7 @@ export default function SpendingVelocityChart() {
                 showDuplicates: false,
                 hideOverlappingLabels: true,
                 formatter: function (value, timestamp, opts) {
-                    if (isMobile) {
+                    if (isMobile && opts && opts.dataPointIndex !== undefined) {
                         const index = opts.dataPointIndex;
                         return index % 3 === 0 ? value : '';
                     }

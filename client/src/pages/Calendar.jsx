@@ -126,18 +126,18 @@ export default function Calendar() {
         </div>
 
         {/* Color Legend */}
-        <div className="mb-4 flex gap-4 text-sm">
+        <div className="mb-4 flex flex-wrap gap-3 sm:gap-4 text-xs sm:text-sm">
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 rounded bg-green-500"></div>
-            <span className="text-gray-600 dark:text-gray-400">&lt; ₹1,000</span>
+            <span className="text-gray-600 dark:text-gray-400 whitespace-nowrap">&lt; ₹1,000</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 rounded bg-yellow-500"></div>
-            <span className="text-gray-600 dark:text-gray-400">₹1,000 - ₹5,000</span>
+            <span className="text-gray-600 dark:text-gray-400 whitespace-nowrap">₹1,000 - ₹5,000</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 rounded bg-red-500"></div>
-            <span className="text-gray-600 dark:text-gray-400">&gt; ₹5,000</span>
+            <span className="text-gray-600 dark:text-gray-400 whitespace-nowrap">&gt; ₹5,000</span>
           </div>
         </div>
 
@@ -172,8 +172,9 @@ export default function Calendar() {
                   })}
                 </h3>
                 <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                  {dayExpenses.length} {dayExpenses.length === 1 ? 'expense' : 'expenses'} • Total: ₹
-                  {Math.round(dayExpenses.reduce((sum, exp) => sum + exp.amount, 0)).toLocaleString()}
+                  <span className="inline-block">{dayExpenses.length} {dayExpenses.length === 1 ? 'expense' : 'expenses'}</span>
+                  <span className="inline-block"> • </span>
+                  <span className="inline-block">Total: {formatCurrencyWithSign(dayExpenses.reduce((sum, exp) => sum + exp.amount, 0))}</span>
                 </p>
               </div>
               <button

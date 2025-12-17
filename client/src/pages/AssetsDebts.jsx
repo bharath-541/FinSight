@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import PageMeta from '../components/common/PageMeta';
+import EmptyState from '../components/common/EmptyState';
 import financeService from '../services/finance.service';
 import AssetsSummaryCards from '../components/finance/AssetsSummaryCards';
 import AssetsTable from '../components/finance/AssetsTable';
@@ -8,6 +9,7 @@ import DebtsList from '../components/finance/DebtsList';
 import AddAssetModal from '../components/finance/AddAssetModal';
 import AddDebtModal from '../components/finance/AddDebtModal';
 import { formatCurrencyWithSign } from '../utils/currency';
+import { AlertIcon } from '../icons';
 
 export default function AssetsDebts() {
     const [assets, setAssets] = useState(null);
@@ -85,10 +87,19 @@ export default function AssetsDebts() {
 
     if (error) {
         return (
-            <div className="p-4 text-error-700 bg-error-50 rounded-lg dark:bg-error-500/10 dark:text-error-400">
-                <p className="font-semibold">Error loading financial data</p>
-                <p className="text-sm mt-1">{error}</p>
-            </div>
+            <>
+                <PageMeta
+                    title="Error | FinSight"
+                    description="An error occurred while loading your financial data"
+                />
+                <EmptyState
+                    icon={AlertIcon}
+                    title="Something went wrong"
+                    description={error}
+                    actionText="Try Again"
+                    actionOnClick={() => fetchData()}
+                />
+            </>
         );
     }
 
@@ -159,16 +170,17 @@ export default function AssetsDebts() {
             <div className="grid grid-cols-12 gap-4 md:gap-6">
                 {/* Net Worth Card */}
                 <div className="col-span-12">
-                    <div className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+                    <div className="rounded-2xl border border-gray-200 bg-white p-4 md:p-6 dark:border-gray-800 dark:bg-white/[0.03]">
                         <div className="flex items-center justify-between">
-                            <div>
+                            <div className="flex-1 min-w-0">
                                 <p className="mb-1 text-sm text-gray-500 dark:text-gray-400">Net Worth</p>
-                                <p className={`text-3xl font-bold ${netWorth >= 0 ? 'text-success-600 dark:text-success-400' : 'text-error-600 dark:text-error-400'}`}>
+                                <p className={`text-2xl md:text-3xl font-bold truncate ${netWorth >= 0 ? 'text-success-600 dark:text-success-400' : 'text-error-600 dark:text-error-400'}`} title={formatCurrencyWithSign(Math.abs(netWorth))}>
                                     {formatCurrencyWithSign(Math.abs(netWorth))}
                                     {netWorth < 0 && ' (Negative)'}
                                 </p>
-                                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                    Assets: {formatCurrencyWithSign(totalAssets)} - Debts: {formatCurrencyWithSign(totalDebts)}
+                                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400 truncate">
+                                    <span className="inline-block">Assets: {formatCurrencyWithSign(totalAssets)}</span>
+                                    <span className="inline-block ml-2">Debts: {formatCurrencyWithSign(totalDebts)}</span>
                                 </p>
                             </div>
                         </div>
@@ -176,13 +188,13 @@ export default function AssetsDebts() {
                 </div>
                 {/* Assets Section */}
                 <div className="col-span-12">
-                    <div className="mb-4 flex items-center justify-between">
+                    <div className="mb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                         <h2 className="text-lg font-semibold text-gray-800 dark:text-white/90">
                             Assets
                         </h2>
                         <button
                             onClick={() => setShowAddAsset(true)}
-                            className="rounded-lg bg-brand-500 px-4 py-2 text-sm font-medium text-white hover:bg-brand-600"
+                            className="w-full sm:w-auto rounded-lg bg-brand-500 px-4 py-2 text-sm font-medium text-white hover:bg-brand-600 whitespace-nowrap"
                         >
                             + Add Asset
                         </button>
@@ -200,13 +212,13 @@ export default function AssetsDebts() {
 
                 {/* Debts Section */}
                 <div className="col-span-12 mt-6">
-                    <div className="mb-4 flex items-center justify-between">
+                    <div className="mb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                         <h2 className="text-lg font-semibold text-gray-800 dark:text-white/90">
                             Debts
                         </h2>
                         <button
                             onClick={() => setShowAddDebt(true)}
-                            className="rounded-lg bg-brand-500 px-4 py-2 text-sm font-medium text-white hover:bg-brand-600"
+                            className="w-full sm:w-auto rounded-lg bg-brand-500 px-4 py-2 text-sm font-medium text-white hover:bg-brand-600 whitespace-nowrap"
                         >
                             + Add Debt
                         </button>
