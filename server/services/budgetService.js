@@ -1,4 +1,5 @@
 const Expense = require('../models/Expense');
+const { round2 } = require('../utils/number');
 
 /**
  * Calculate 50/30/20 budget analysis for a given month
@@ -91,12 +92,26 @@ const calculateInsights = async (userId, monthlyIncome, month) => {
         date: { $gte: startDate, $lt: endDate }
     });
 
-    // Safe to spend calculation
+    // Calculate spending by bucket
     const needsSpent = expenses
         .filter(e => e.bucket === 'needs')
         .reduce((sum, e) => sum + e.amount, 0);
     
-    const safeToSpend = Math.max(0, monthlyIncome - needsSpent - (monthlyIncome * 0.2));
+    const totalSpent = expenses.reduce((sum, e) => sum + e.amount, 0);
+    
+    // CRITICAL: remainingCash is a DERIVED, MONTH-SCOPED metric (NOT a persistent asset)
+    // Formula: monthlyIncome - totalSpent (for current month only)
+    // 
+    // Important properties:
+    // - Calculated on-demand, never stored in database
+    // - Resets every month (no carryover)
+    // - Can be negative (indicates overspending)
+    // - Must NEVER be converted into a cash asset
+    // - Must NEVER influence net worth calculations
+    // 
+    // This is purely informational for display in budget summary.
+    // When month ends, this value expires. Assets remain unchanged.
+    const remainingCash = round2(monthlyIncome - totalSpent);
 
     // Top 3 categories
     const categoryTotals = {};
@@ -111,7 +126,7 @@ const calculateInsights = async (userId, monthlyIncome, month) => {
 
     // Daily average
     const daysInMonth = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 0).getDate();
-    const dailyAverage = expenses.reduce((sum, e) => sum + e.amount, 0) / daysInMonth;
+    const dailyAverage = round2(expenses.reduce((sum, e) => sum + e.amount, 0) / daysInMonth);
 
     // Previous month comparison
     const prevMonthStart = new Date(startDate);
@@ -126,7 +141,7 @@ const calculateInsights = async (userId, monthlyIncome, month) => {
     const currentTotal = expenses.reduce((sum, e) => sum + e.amount, 0);
     const prevTotal = prevExpenses.reduce((sum, e) => sum + e.amount, 0);
     const monthlyChange = prevTotal > 0 
-        ? parseFloat((((currentTotal - prevTotal) / prevTotal) * 100).toFixed(2))
+        ? round2(((currentTotal - prevTotal) / prevTotal) * 100)
         : 0;
 
     // Expense streak (simplified: days where total spending <= daily budget)
@@ -157,9 +172,9 @@ const calculateInsights = async (userId, monthlyIncome, month) => {
     }
 
     return {
-        safeToSpend: parseFloat(safeToSpend.toFixed(2)),
+        remainingCash,
         topCategories,
-        dailyAverage: parseFloat(dailyAverage.toFixed(2)),
+        dailyAverage,
         monthlyComparison: {
             currentMonth: currentTotal,
             previousMonth: prevTotal,

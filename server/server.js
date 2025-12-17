@@ -40,9 +40,20 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/user', require('./routes/user'));
 app.use('/api/expenses', require('./routes/expenses'));
 app.use('/api/summary', require('./routes/summary'));
+app.use('/api/assets', require('./routes/assets'));
+app.use('/api/debts', require('./routes/debts'));
+app.use('/api/net-worth', require('./routes/netWorth'));
 
-// Health check endpoint
+// Health check endpoints
 app.get('/health', (req, res) => {
+    res.status(200).json({
+        success: true,
+        message: 'Server is running',
+        timestamp: new Date().toISOString()
+    });
+});
+
+app.get('/api/health', (req, res) => {
     res.status(200).json({
         success: true,
         message: 'FinSight API is running',

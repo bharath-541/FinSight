@@ -64,7 +64,7 @@ const createExpense = async (req, res) => {
  */
 const getExpenses = async (req, res) => {
     try {
-        const { month } = req.query;
+        const { month, bucket, category } = req.query;
         const query = { user: req.userId };
 
         // Filter by month if provided
@@ -85,6 +85,22 @@ const getExpenses = async (req, res) => {
                 $gte: startDate,
                 $lt: endDate
             };
+        }
+
+        // Filter by bucket if provided
+        if (bucket) {
+            if (!['needs', 'wants', 'savings'].includes(bucket.toLowerCase())) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Bucket must be one of: needs, wants, savings'
+                });
+            }
+            query.bucket = bucket.toLowerCase();
+        }
+
+        // Filter by category if provided
+        if (category) {
+            query.category = new RegExp(category.trim(), 'i'); // Case-insensitive match
         }
 
         // Get expenses sorted by date (newest first)

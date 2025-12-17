@@ -187,7 +187,8 @@ Authorization: Bearer <token>
 **Response includes**:
 - 50/30/20 budget breakdown
 - Status: `on_track`, `warning`, or `off_track`
-- Safe-to-spend amount
+- Safe-to-spend (advisory: how much can be spent on wants)
+- Remaining cash (reality: actual money left)
 - Top 3 spending categories
 - Monthly comparison with previous month
 - Daily average spending
@@ -216,11 +217,14 @@ Authorization: Bearer <token>
 
 ### Insights Calculations
 
-1. **Safe-to-spend**: `income - needsSpent - (income × 0.20)`
-2. **Top Categories**: Top 3 by total spending
-3. **Monthly Comparison**: Current vs previous month spending
-4. **Daily Average**: Total spending / days elapsed in the current month
-5. **Expense Streak**: Consecutive days staying within daily budget limits
+> **Note:** Safe to Spend is an advisory metric based on the 50/30/20 rule and does not represent actual remaining cash. Remaining Cash reflects the real financial position.
+
+1. **Safe-to-spend (Advisory)**: `income - needsSpent - (income × 0.20)` - How much can still be spent on wants per the rule
+2. **Remaining Cash (Reality)**: `income - totalSpent` - Actual money left (can be negative)
+3. **Top Categories**: Top 3 by total spending
+4. **Monthly Comparison**: Current vs previous month spending
+5. **Daily Average**: Total spending / days elapsed in the current month
+6. **Expense Streak**: Consecutive days staying within daily budget limits
 
 ## Data Models
 
